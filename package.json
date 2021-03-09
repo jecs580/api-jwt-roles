@@ -4,10 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node src/index.js"
+    "build": "babel src --out-dir dist",
+    "start":"node dist index.js",
+    "dev": "nodemon src/index.js --exec babel-node"
   },
   "keywords": [],
-  "author": "",
+  "author": "Jorge Callisaya",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
