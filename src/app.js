@@ -9,7 +9,7 @@ const app = express()
 app.set('pkg',pkg)
 app.use(morgan('dev'));
 
-
+app.use(express.json())
 app.get('/',(req,res)=>{
     console.log('hola');
     return res.status(200).json({
