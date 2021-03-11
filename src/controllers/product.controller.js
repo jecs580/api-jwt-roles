@@ -10,27 +10,46 @@ const createProduct = async(req=request,res=response)=>{
     })
 };
 
-const getProducts = (req=request,res=response)=>{
+const getProducts = async (req=request,res=response)=>{
+    const products =  await Product.find();
     return res.json({
         ok:true,
+        products
     })
 };
 
-const getProductById = (req=request,res=response)=>{
+const getProductById = async(req=request,res=response)=>{
+    const id =  req.params['productId'];
+    const product = await Product.findById(id);
+    console.log(id);
     return res.json({
         ok:true,
+        product
     })
 };
 
-const updateProductById = (req=request,res=response)=>{
+const updateProductById = async(req=request,res=response)=>{
+    const id =  req.params['productId'];
+    const productdb = await Product.findById(id);
+    if(!productdb){
+        return res.json({
+            ok:false,
+            msg:'No existe un producto por ese ID'
+        })
+    }
+    const updatedProduct = await Product.findByIdAndUpdate(id,req.body,{new:true});
     return res.json({
         ok:true,
+        product:updatedProduct
     })
 };
 
-const deleteProductById = (req=request,res=response)=>{
+const deleteProductById = async(req=request,res=response)=>{
+    const id = req.params['productId'];
+    const deletedProduct = await Product.findByIdAndDelete(id);
     return res.json({
         ok:true,
+        product: deletedProduct
     })
 };
 
