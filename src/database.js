@@ -2,7 +2,8 @@ import mongoose from 'mongoose'
 
     mongoose.connect('mongodb://localhost/api_jwt_rolesDB',{
         useNewUrlParser:true,
-        useUnifiedTopology:true
+        useUnifiedTopology:true,
+        useCreateIndex:true
     })
     .then(()=>console.log('>>> DB conectada'))
     .catch((err)=>{
