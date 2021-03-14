@@ -46,8 +46,28 @@ const signup = async(req=request, res=response)=>{
     })
 }
 const signin = async(req=request, res=response)=>{
+    console.log(req.body);
+    const userFound =  await User.findOne({email:req.body['email']}).populate('roles')
+    if(!userFound){
+        return res.status(400).json({
+            ok:false,
+            msg:'No existe un usuario con ese email'
+        }) 
+    }
+    console.log(userFound);
+    const matchPassword = await User.comparePassword(userFound.password, req.body['password']);
+    if(!matchPassword){
+        return res.status(401).json({
+            ok:false,
+            msg:'Contraseña invalida'
+        }) 
+    }
+    const token = jwt.sign({id:userFound._id},config.SECRET,{
+        expiresIn: '24h' // 24 hours
+    });
     return res.json({
-        ok:true
+        ok:true,
+        token
     })
 }
 

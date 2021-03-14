@@ -29,7 +29,7 @@ userSchema.statics.encryptPassword =  (password)=>{
     return  bcrypt.hash(password,salt);
 }
 userSchema.statics.comparePassword = async(password, receivePassword)=>{
-    return bcrypt.compareSync(password,receivePassword);
+    return bcrypt.compareSync(receivePassword,password);
 }
 
 export default model('user',userSchema);
