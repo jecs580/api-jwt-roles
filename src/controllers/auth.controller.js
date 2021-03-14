@@ -54,7 +54,6 @@ const signin = async(req=request, res=response)=>{
             msg:'No existe un usuario con ese email'
         }) 
     }
-    console.log(userFound);
     const matchPassword = await User.comparePassword(userFound.password, req.body['password']);
     if(!matchPassword){
         return res.status(401).json({
