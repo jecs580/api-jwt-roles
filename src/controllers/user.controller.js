@@ -1,19 +1,14 @@
 import {request,response} from 'express'
+import User from '../models/User'
 
-const createUser=(req=request, res=response)=>{
-    
-    return res.json({
-        ok:true
-    })
-}
-
-const getUsers = (req=request,res=response)=>{
+const getUsers = async (req=request,res=response)=>{
+    const users = await User.find().populate('roles');
     return res.json({
         ok:true,
+        users,
     })
 };
 
 module.exports = {
-    createUser,
     getUsers
 }

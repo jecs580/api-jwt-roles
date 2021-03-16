@@ -19,21 +19,6 @@ const signup = async(req=request, res=response)=>{
     });
     if(roles){
         const foundRoles = await Role.find({name:{$in:roles}})
-        if(foundRoles.length===0){
-            return res.status(400).json({
-                ok:false,
-                msg:'No existen los roles ingresados'
-            })
-        }
-        for (let i = 0; i < roles.length; i++) {
-            if(!ROLES.includes(roles[i])){
-                return res.status(400).json({
-                    ok:false,
-                    msg:`El role ${roles[i]} no existe`
-                })
-            }
-            
-        }
         newUser.roles =  foundRoles.map(role=> role._id);
     }else{
         const role = await Role.findOne({name:"user"});
@@ -50,7 +35,7 @@ const signup = async(req=request, res=response)=>{
 }
 const signin = async(req=request, res=response)=>{
     console.log(req.body);
-    const userFound =  await User.findOne({email:req.body['email']}).populate('roles')
+    const userFound =  await User.findOne({email:req.body['email']}).populate('roles', 'name')
     if(!userFound){
         return res.status(400).json({
             ok:false,
