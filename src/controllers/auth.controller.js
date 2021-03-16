@@ -1,6 +1,6 @@
 import {request,response} from 'express'
 import User from '../models/User'
-import Role from '../models/Role'
+import Role,{ROLES} from '../models/Role'
 import jwt from 'jsonwebtoken'
 import config from '../config'
 const signup = async(req=request, res=response)=>{
@@ -25,24 +25,27 @@ const signup = async(req=request, res=response)=>{
                 msg:'No existen los roles ingresados'
             })
         }
-        if(foundRoles.length != roles.length){
-            return res.status(400).json({
-                ok:false,
-                msg:'Algunos roles ingresados no existen'
-            })
+        for (let i = 0; i < roles.length; i++) {
+            if(!ROLES.includes(roles[i])){
+                return res.status(400).json({
+                    ok:false,
+                    msg:`El role ${roles[i]} no existe`
+                })
+            }
+            
         }
         newUser.roles =  foundRoles.map(role=> role._id);
     }else{
         const role = await Role.findOne({name:"user"});
         newUser.roles = [role._id]
     }
-    const createdUser =  await newUser.save();
-    const token = jwt.sign({id:createdUser._id},config.SECRET,{
-        expiresIn: '24h' // 24 hours
-    })
+    // const createdUser =  await newUser.save();
+    // const token = jwt.sign({id:createdUser._id},config.SECRET,{
+    //     expiresIn: '24h' // 24 hours
+    // })
     return res.json({
         ok:true,
-        token
+        // token
     })
 }
 const signin = async(req=request, res=response)=>{
